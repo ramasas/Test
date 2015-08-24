@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>EaselJS demo: Dragging</title>
+	<link href='../_shared/demo.css' rel='stylesheet' type='text/css'>
+	<script src='http://code.createjs.com/easeljs-0.7.0.min.js'></script>
+	<script>
+		var stage, output;
+		
+		function init() {
+			stage = new createjs.Stage('demoCanvas');
+			
+			// this lets our drag continue to track the mouse even when it leaves the canvas:
+			// play with commenting this out to see the difference.
+			stage.mouseMoveOutside = true;
+			createjs.Touch.enable(stage);
+			
+			var dragger = new createjs.Container(),
+				bitmap = new createjs.Bitmap('blank.gif'),
+				rect = new createjs.Shape(),
+				anchorR = new createjs.Shape(),
+				anchorS = new createjs.Shape(),
+				stampDrag = function(evt) {
+					// this is dragger
+					if (evt.target.name == 'S' || evt.target.name == 'R') return;
+					this.x = evt.stageX + this.offset.x;
+					this.y = evt.stageY + this.offset.y;
+					stage.update();
+				},
+				stampScale = function(evt) {
+					var dragger = evt.currentTarget.parent,
+						pt = dragger.globalToLocal(evt.stageX, evt.stageY),
+						rect = dragger.getChildByName('rect'),
+						bitmap = dragger.getChildByName('bitmap'),
+						anchorR = dragger.getChildByName('R'),
+						w = pt.x * 2,
+						h = pt.y * 2;
+					this.x = pt.x;
+					this.y = pt.y;
+					rect.graphics.clear();
+					rect.graphics.beginStroke('gray').setStrokeStyle(5).drawRect(w / -2, h / -2, w, h);
+					rect.setBounds(0, 0, w, h);
+					bitmap.scaleX = w / bitmap.image.width;
+					bitmap.scaleY = h / bitmap.image.height;
+					anchorR.x = pt.x;
+					anchorR.y = pt.y - h / 2;
+					
+					stage.update();
+				},
+				stampRotate = function(evt) {
+					var dragger = stage.getChildByName('dragger'),
+						center = dragger.localToGlobal(0, 0);
+					
+					var rotation = Math.atan2(evt.stageY - center.y, evt.stageX - center.x) * 180 / Math.PI;
+					dragger.rotation = rotation;
+					
+					stage.update();
+				};
+			
+			var image = new Image();
+			image.onload = function() {
+				var w = this.width, h = this.height;
+				
+				dragger.name = 'dragger';
+				dragger.x = dragger.y = 0;
+				dragger.size = {w: w, h: h};
+				dragger.on('mousedown', function(evt) {
+					if (evt.target.name == 'S' || evt.target.name == 'R') return;
+					this.offset = {
+						x: this.x - evt.stageX,
+						y: this.y - evt.stageY
+					};
+				});
+				dragger.on('pressmove', stampDrag);
+				
+				bitmap.image = this,
+				bitmap.name = 'bitmap';
+				bitmap.regX = w / 2;
+				bitmap.regY = h / 2;
+				bitmap.x = 0;
+				bitmap.y = 0;
+				
+				rect.name = 'rect';
+				rect.x = 0;
+				rect.y = 0;
+				rect.setBounds(0, 0, w, h);
+				rect.graphics.beginStroke('gray').setStrokeStyle(5).drawRect(w / -2, h / -2, w, h);
+				
+				var radius = 30;
+				anchorS.name = 'S';
+				anchorS.x = w / 2;
+				anchorS.y = h / 2;
+				anchorS.cursor = 'pointer';
+				anchorS.graphics.beginStroke('gray').setStrokeStyle(5).beginFill('white').drawCircle(0, 0, radius);
+				anchorS.on('pressmove', stampScale);
+				
+				anchorR.name = 'R';
+				anchorR.x = w / 2;
+				anchorR.y = 0;
+				anchorR.cursor = 'pointer';
+				anchorR.graphics.beginStroke('gray').setStrokeStyle(5).beginFill('silver').drawCircle(0, 0, radius);
+				anchorR.on('pressmove', stampRotate);
+				
+				dragger.addChild(bitmap, rect, anchorS, anchorR);
+				stage.update();
+			};
+			image.src = 'sun_icon2.png';
+			
+			stage.addChild(dragger);
+			stage.update();
+		}
+	</script>
+</head>
+<body onload='init();'>
+	<canvas id='demoCanvas' width='1000' height='800'>
+		alternate content
+	</canvas>
+</body>
+</html>

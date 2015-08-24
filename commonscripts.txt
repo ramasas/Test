@@ -1,0 +1,81 @@
+dir /s/b/o:n
+
+text-overflow: ellipsis;
+overflow: hidden;
+width: 100%;
+display: block;
+white-space: nowrap;
+
+
+<script type="text/javascript">
+	window.console && console.log && console.log("hello world");	
+</script>
+
+
+<font style="background-color:#000">abc</font>
+<span style="background-color:#000">abc</span>
+
+Find: <font(.*)>(.*)</font>
+Replace: <span$1>$2</span>
+
+<div class="overviewIconBG"><div (.*)="demoScreenIcon(.*)></div></div>
+<div class="overviewIconBG"><a $1="demoScreenIcon$2></a></div>
+
+
+.png {
+	background-image:none;
+	zoom:1;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=images/MP_hkdl_logo.png,sizingMethod='crop',enabled='true');
+}
+
+
+(function() {
+    var consoleDisabled = false;
+    if (consoleDisabled) {
+        window.console = undefined;
+    }
+    if (window.console === undefined) {
+        window.console = {
+            debug: function() {
+                return true;
+            },
+            info: function() {
+                return false;
+            },
+            warn: function() {
+                return false;
+            },
+            log: function() {
+                return false;
+            }
+        }
+    }
+    debug = (function(args) {
+        window.console.debug(args);
+    });
+    info = (function(args) {
+        window.console.info(args);
+    });
+    warn = (function(args) {
+        window.console.warn(args);
+    });
+    log = (function(args) {
+        window.console.log(args);
+    });
+})();
+
+
+> compass create
+> compass watch --output-style compact --no-line-comments
+> compass compile scss/apple.scss --css-dir=css/appleCompact.css --output-style compact --no-line-comments
+
+
+npm install gulp --save-dev
+npm install gulp-watch --save-dev
+npm install gulp-sass --save-dev
+npm install gulp-compass --save-dev
+
+
+> npm install grunt --save-dev
+> npm install grunt-contrib-compass --save-dev
+> npm install grunt-contrib-watch --save-dev

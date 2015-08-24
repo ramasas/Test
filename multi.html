@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>EaselJS Example: Multitouch.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript" src="http://code.createjs.com/easeljs-0.7.0.min.js"></script>
+    <script type="text/javascript" src="com/firsara/sys.js"></script>
+    <script type="text/javascript" src="com/firsara/display/Transformable.js"></script>
+    <script type="text/javascript" src="com/firsara/display/MoveClip.js"></script>
+    <script type="text/javascript" src="com/firsara/display/RotateClip.js"></script>
+    <script type="text/javascript" src="com/firsara/display/ScaleClip.js"></script>
+    <script type="text/javascript" src="com/firsara/display/TransformClip.js"></script>
+</head>
+
+<body onload="init();">
+
+<a href="javascript:getProperties();">Check</a>
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<style type="text/css">
+    body {
+        overflow: hidden;
+        background: #eaeaea;
+    }
+    
+    * {
+        margin: 0;
+    }
+</style>
+
+<script type="text/javascript">
+var stage;
+
+function resize() {
+    stage.canvas.width = window.innerWidth;
+    stage.canvas.height = window.innerHeight;
+}
+
+function stampRotate(evt) {
+    var dragger = stage.getChildByName('dragger'),
+        center = dragger.localToGlobal(0, 0);
+    var rotation = Math.atan2(evt.stageY - center.y, evt.stageX - center.x) / createjs.Matrix2D.DEG_TO_RAD;
+    dragger.rotation = rotation;
+    stage.update();
+}
+
+function init() {
+    setTimeout(render, 100);
+    
+    //anchorR.on('pressmove', stampRotate);
+}
+
+function render() {
+    stage = new createjs.Stage('canvas');
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    var transformable = new com.firsara.display.TransformClip();
+    transformable.name = 'dragger';
+
+    var bitmap = new createjs.Bitmap('../sun_icon2.png');
+    bitmap.name = 'bitmap';
+    bitmap.regX = 354 / 2;
+    bitmap.regY = 348 / 2;
+
+
+    var shape = new createjs.Shape();
+    shape.name = 'shape';
+    shape.graphics.beginFill('#212121');
+    shape.graphics.drawRect(-100, -100, 200, 200);
+    shape.graphics.endFill();
+    transformable.addChild(shape);
+
+    transformable.x = stage.canvas.width / 2;
+    transformable.y = stage.canvas.height / 2;
+    transformable.x = 0;
+    transformable.y = 0;
+
+    transformable.borders.x = [50, stage.canvas.width - 50];
+    transformable.borders.y = [50, stage.canvas.height - 50];
+    transformable.borders.scale = [0.5, 3];
+
+    stage.addChild(transformable);
+
+    createjs.Touch.enable(stage);
+    createjs.Ticker.setFPS(60);
+    createjs.Ticker.addEventListener('tick', tick);
+}
+
+function tick() {
+    stage.update();
+}
+
+function getProperties() {
+    var dragger = stage.getChildByName('dragger')
+    bitmap = dragger.getChildByName('shape'),
+    str = dragger.rotation + ', ' + dragger.x + ', ' + dragger.y + ', ' + dragger.scaleX + ', ' + dragger.scaleY;
+    alert(str);
+}
+</script>
+
+</body>
+</html>

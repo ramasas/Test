@@ -1,0 +1,105 @@
+$ ionic start myapp http://codepen.io/ionic/pen/hqcju
+http://codepen.io/ionic/public-list/
+
+> ionic start [folder name] blank -i com.abc.abc -a [app name]
+> ionic platform add android
+> ionic setup sass
+> bower install ngCordova
+
+
+
+1. Include ng-cordova.js or ng-cordova.min.js in your index.html file before cordova.js and after your AngularJS / Ionic file (since ngCordova depends on AngularJS).
+<script src="lib/ngCordova/dist/ng-cordova.js"></script>
+<script src="cordova.js"></script>
+
+2. Then, include ngCordova as a dependency in your angular module:
+angular.module('myApp', ['ngCordova'])
+
+3. Wrap each plugin call with the deviceready event - important !
+Before each plugin you must check if your device has fully loaded, and if the plugins are available using a native cordova event called deviceready. Implement it like so:
+
+document.addEventListener("deviceready", function () {
+  $cordovaPlugin.someFunction().then(success, error);
+}, false);
+
+// OR with IONIC
+
+$ionicPlatform.ready(function() {
+  $cordovaPlugin.someFunction().then(success, error);
+});
+
+
+
+C:\Android\sdk\build-tools\android-4.4W\zipalign -f -v 4 handbookuat.apk handbookuat_googleplay.apk
+
+ADB
+adb -s emulator-5554 shell
+am broadcast -a android.intent.action.BOOT_COMPLETED
+
+
+PhoneGap / Cordova
+
+http://docs.phonegap.com/en/2.3.0/guide_getting-started_android_index.md.html#Getting%20Started%20with%20Android
+
+
+1. Install SDK + Cordova 
+- Download and install Eclipse Classic (http://www.eclipse.org/downloads/packages/eclipse-classic-422/junosr2)
+- Download and install Android SDK
+- Download and install ADT Plugin (http://developer.android.com/tools/sdk/eclipse-adt.html)
+- Download the latest copy of Cordova and extract its contents (http://cordova.apache.org/)
+
+
+2. Download Apache Ant and extract files (http://ant.apache.org/bindownload.cgi)
+
+3. Set environment variables
+- Add ANT_HOME (e.g. C:\apache-ant-1.8.4)
+- Add %JAVA_HOME%\bin to PATH
+- Add %ANT_HOME%\bin to PATH
+
+4. Create a new proj
+> cd C:\cordova-2.7.0\cordova-android\bin
+> create <project_folder_path> <package_name> <project_name>
+(e.g. create C:\MyApp com.opencreative.MyApp MyApp)
+
+5. Open Eclipse
+6. File > New > Projects...
+7. Android Project from Existing Code
+8. Tick the checkbox "Copy projects into workspace"
+9. Finish
+10. Select folder <project_folder_path>
+11. Right click project > Run As... > Android Application
+12. The *.apk is located at <project_folder_path>/bin
+
+
+qooxdoo
+> python "C:\Documents\_JSLibrary\qooxdoo-2.1-sdk\tool\bin\create-application.py" -n qxd -o C:\PhoneGapWorkSpace\pgapp\assets\www\ -t mobile
+> cd C:\PhoneGapWorkSpace\pgapp\assets\www\qxd
+> python generate.py
+
+(http://qooxdoo.678.n2.nabble.com/Qooxdoo-mobile-and-PhoneGap-td7500218.html)
+Deploy your qx.Mobile application
+You developed a great qx.Mobile application, and want to use or test it on your mobile device.
+
+For this purpose, we propose using Apache Cordova.
+
+It gives you the possibility to deploy native applications, that run the qooxdoo mobile JavaScript code in an wrapped native browser, in the App Stores or directly on your mobile device. A free distribution of Cordova is also available, it is called "PhoneGap".
+
+On Cordova website you find detailed tutorials available which describe the deployment on different mobile platforms:
+
+Cordova Getting Started Tutorial
+
+Configure Cordova for deploying your qx.Mobile application
+After you installed cordova, and followed the introductions of Cordova Getting Started Tutorial, you are able to deploy your qx.Mobile application on your mobile device.
+
+Follow these steps:
+
+Build your application with generate.py build.
+Duplicate content of your qx.Mobile build folder, into Cordova deploy folder assets/www including the index.html.
+Paste the following line in head part of assets/www/index.html:
+<script type="text/javascript" charset="utf-8" src="cordova-1.6.0.js"></script>
+
+Cross-check the version of the "cordova.js" in script tag, against the version you use.
+That should do the trick. Now Cordova can deploy your qx.Mobile application on the connected Mobile Device. For executing the deployment, have a look on Cordova Getting Started Tutorial.
+
+Update application on your mobile device
+If you want to update your qx.Mobile application, you just have to copy the folders resource and script into Cordova's deploy folder assets/www/. An update of the assets/www/index.html is not necessary.
