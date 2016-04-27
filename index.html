@@ -37,7 +37,6 @@
     </div>
     <script src="javascripts/scale.fix.js"></script>
     <script>
-      //navigator.serviceWorker.register('./javascripts/sw.js');
       navigator.serviceWorker.register('/javascripts/sw.js', {
         scope: '/Test/'
       }).then(function(reg) {
@@ -45,12 +44,17 @@
       }, function(err) {
         console.log('ಠ_ಠ', err);
       });
-      Notification.requestPermission(function(result) {
-        if (result === 'granted') {
-          navigator.serviceWorker.ready.then(function(registration) {
-            registration.showNotification('Notification with ServiceWorker');
-          });
-        }
+      function sendNotification() {
+        Notification.requestPermission(function(result) {
+          if (result === 'granted') {
+            navigator.serviceWorker.ready.then(function(registration) {
+              registration.showNotification('Notification with ServiceWorker');
+            });
+          }
+        });
+      }
+      var interval = setInterval(function() {
+        if (Math.floor(Math.random() * 5000) == 0) sendNotification();
       });
     </script>
     
