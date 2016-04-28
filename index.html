@@ -37,8 +37,8 @@
     </div>
     <script src="javascripts/scale.fix.js"></script>
     <script>
-      navigator.serviceWorker.register('sw.js', {
-        scope: '/Test'
+      navigator.serviceWorker.register('./sw.js', {
+        //scope: 'Test'
       }).then(function(reg) {
         console.log('◕‿◕', reg);
       }, function(err) {
